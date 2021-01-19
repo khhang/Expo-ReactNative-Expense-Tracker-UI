@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "expense.tracker.v1"
     },
     "web": {
       "favicon": "./assets/favicon.png"
