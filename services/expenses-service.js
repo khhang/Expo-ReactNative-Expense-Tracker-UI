@@ -30,7 +30,8 @@ const getCategorySummary = (startDate, endDate) => {
       select
         c.name as categoryName,
         e.categoryId,
-        sum(e.amount) as totalAmount
+        sum(e.amount) as totalAmount,
+        count(*) as numTransactions
       from Expenses e inner join Categories c
         on e.categoryId = c.id
       where 
@@ -46,6 +47,30 @@ const getCategorySummary = (startDate, endDate) => {
     reject)
   }));
 }
+
+const getSubcategorySummaryByCategoryId = (categoryId, startDate, endDate) => {
+  return new Promise((resolve, reject) => dbAccess.transaction(tx => {
+    tx.executeSql(`
+      select
+        sc.name as categoryName,
+        e.subcategoryId,
+        sum(e.amount) as totalAmount
+      from Expenses e left outer join Subcategories sc
+        on e.subcategoryId = sc.id
+      where 
+        e.date >= '${startDate}' and e.date <= '${endDate}'
+        and e.categoryId = ?
+      group by
+        e.subcategoryId
+      order by sc.name asc;
+    `,
+    [categoryId],
+    (_, { rows: { _array }}) => {
+      resolve(_array)
+    },
+    reject)
+  }));
+};
 
 const addExpense = (categoryId, subcategoryId, description, amount, accountId, date) => {
   return new Promise((resolve, reject) => dbAccess.transaction(tx => {
@@ -83,5 +108,6 @@ export const expensesService = {
   getExpenseDetails,
   addExpense,
   updateExpense,
-  getExpenseDetails2: getCategorySummary
+  getCategorySummary,
+  getSubcategorySummaryByCategoryId
 };

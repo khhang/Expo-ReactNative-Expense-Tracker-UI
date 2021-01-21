@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList }
 import {expensesService} from './../services/expenses-service';
 import {Ionicons} from '@expo/vector-icons';
 import CategorySummaryListItem from './../components/CategorySummaryListItem';
-import {formatBalance} from './../services/format-service';
+import {formatBalance, getMonthName} from './../services/format-service';
 
 const ExpenseAnalysis = () => {
   const [categorySummary, setCategorySummary] = useState([]);
@@ -24,35 +24,6 @@ const ExpenseAnalysis = () => {
     return new Date(date.getFullYear(), date.getMonth(), 1);
   };
 
-  const getMonthName = (month) => {
-    switch(month){
-      case 0:
-        return 'January';
-      case 1:
-        return 'February';
-      case 2:
-        return 'March';
-      case 3:
-        return 'April';
-      case 4:
-        return 'May';
-      case 5:
-        return 'June';
-      case 6:
-        return 'July';
-      case 7:
-        return 'August';
-      case 8:
-        return 'September';
-      case 9:
-        return 'October';
-      case 10:
-        return 'November';
-      case 11:
-        return 'December';
-    }
-  }
-
   const getNetGain = () => {
     let sum = 0;
     categorySummary.forEach(x => sum += x.totalAmount);
@@ -60,7 +31,7 @@ const ExpenseAnalysis = () => {
   };
 
   const fetchData = async () => {
-    setCategorySummary(await expensesService.getExpenseDetails2(
+    setCategorySummary(await expensesService.getCategorySummary(
       getFirstDateOfMonth(selectedEndDate).toISOString(),
       selectedEndDate.toISOString())
     );
@@ -105,7 +76,11 @@ const ExpenseAnalysis = () => {
           (<FlatList
             data={categorySummary}
             keyExtractor={item => item.categoryId.toString()}
-            renderItem={({item}) => (<CategorySummaryListItem item={item}/>)}
+            renderItem={({item}) => (<CategorySummaryListItem clickEnabled={true} item={{
+              ...item,
+              startDate: getFirstDateOfMonth(selectedEndDate).toISOString(),
+              endDate: selectedEndDate.toISOString()
+            }}/>)}
           />) :
           (
             <View style={{height: '100%', justifyContent: 'center', backgroundColor: 'white'}}>

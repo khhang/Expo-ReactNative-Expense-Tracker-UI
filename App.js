@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer'; 
 import React, { useEffect, useState } from 'react';
 import { StatusBar, View } from 'react-native';
-import {initializeTables} from './services/sqlite-service';
+import {dropExpenseTables, initializeTables} from './services/sqlite-service';
 
 import HomeStackNavigator from './navigation/HomeStackNavigator';
 import AccountsStackNavigator from './navigation/AccountsStackNavigator';
@@ -43,15 +43,16 @@ const App = () => {
       await accountsService.addAccount('HSBC Debit', '69.69');
 
       // Expenses
-      await expensesService.addExpense(1, 1, 'Car Payment', 25.60, 1, new Date().toISOString());
-      await expensesService.addExpense(2, 4, 'Vons groceries', 62.10, 1, new Date().toISOString());
+      await expensesService.addExpense(1, 1, 'Car Payment', -25.60, 1, new Date().toISOString());
+      await expensesService.addExpense(2, 4, 'Vons groceries', -62.10, 1, new Date().toISOString());
       await expensesService.addExpense(1, 1, 'Servicing', 100.81, 1, new Date().toISOString());
-      await expensesService.addExpense(1, 2, 'Uber', 55.29, 2, new Date().toISOString());
-      await expensesService.addExpense(2, null, 'Sheba', 62.10, 1, new Date().toISOString());
+      await expensesService.addExpense(1, 2, 'Uber', -55.29, 2, new Date().toISOString());
+      await expensesService.addExpense(2, null, 'Sheba', -62.10, 1, new Date().toISOString());
       await expensesService.addExpense(4, 10, null, 62.10, 1, new Date().toISOString());
     }
 
     const init = async() => {
+      // await dropExpenseTables();
       await initializeTables();
     }
 
@@ -67,7 +68,7 @@ const App = () => {
       ref={navigationRef}
       onStateChange={() => setCurrRoute(navigationRef.current.getCurrentRoute().name)}
     >
-      <View style={{paddingTop: StatusBar.currentHeight + 10}}/>
+      <View style={{paddingTop: StatusBar.currentHeight + 15}}/>
       <Drawer.Navigator 
         initialRouteName={currRoute}
       >
