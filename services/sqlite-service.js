@@ -48,7 +48,12 @@ export const initializeTables = () => {
     );
 
     tx.executeSql(`
-        create table if not exists Budgets()
+        create table if not exists Budgets(
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          categoryId INTEGER NOT NULL,
+          deletedDate TEXT,
+          cap REAL NOT NULL
+        )
     `);
   },
   reject,

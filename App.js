@@ -9,6 +9,7 @@ import AccountsStackNavigator from './navigation/AccountsStackNavigator';
 import BudgetsStackNavigator from './navigation/BudgetsStackNavigator';
 import CategoriesStackNavigator from './navigation/CategoriesStackNavigator';
 import ExpensesStackNavigator from './navigation/ExpensesStackNavigator';
+import ExpenseAnalysisStackNavigator from './navigation/ExpenseAnalysisStackNavigator';
 
 import {categoriesService} from './services/categories-service';
 import {accountsService} from './services/accounts-service';
@@ -66,7 +67,7 @@ const App = () => {
       ref={navigationRef}
       onStateChange={() => setCurrRoute(navigationRef.current.getCurrentRoute().name)}
     >
-      <View style={{paddingTop: StatusBar.currentHeight}}/>
+      <View style={{paddingTop: StatusBar.currentHeight + 10}}/>
       <Drawer.Navigator 
         initialRouteName={currRoute}
       >
@@ -84,6 +85,10 @@ const App = () => {
         <Drawer.Screen 
           name="Expenses"
           component={ExpensesStackNavigator}/>
+        <Drawer.Screen 
+          name="ExpenseAnalysis"
+          component={ExpenseAnalysisStackNavigator}
+          options={{title: 'Expense Analysis'}}/>
         <Drawer.Screen
           name="Categories"
           component={CategoriesStackNavigator}/>

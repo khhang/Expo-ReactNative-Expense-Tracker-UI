@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
+import {formatBalance} from './../services/format-service';
 
 const formatDate = (date) => {
   return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
@@ -10,8 +11,10 @@ const formatDate = (date) => {
 const ExpenseListItem = ({expenseDetail}) => {
   const navigation = useNavigation();
 
+  const isPositive = expenseDetail.amount >= 0;
+
   return (
-    <View style={[styles.itemContainer, expenseDetail.amount >= 0 ? styles.itemContainerPositive : styles.itemContainerNegative]}>
+    <View style={[styles.itemContainer, isPositive ? styles.itemContainerPositive : styles.itemContainerNegative]}>
       <View style={styles.row}>
         <Text style={{fontWeight: 'bold', maxWidth: 300}}>{expenseDetail.description || '~'}</Text>
         <TouchableOpacity
@@ -29,7 +32,7 @@ const ExpenseListItem = ({expenseDetail}) => {
       <Text>{expenseDetail.accountName}</Text>
       <View style={styles.row}>
         <Text style={{color: '#696969'}}>{formatDate(new Date(expenseDetail.date))}</Text>
-        <Text>{expenseDetail.amount >= 0  ? `$ ${expenseDetail.amount}` : `-$ ${Math.abs(expenseDetail.amount)}`}</Text>
+        <Text style={[isPositive ? styles.amountPositive : styles.amountNegative]}>{formatBalance(expenseDetail.amount)}</Text>
       </View>
     </View>
   );
@@ -40,7 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 2,
     padding: 5,
-    marginVertical: 8
+    marginVertical: 3
   },
   itemContainerPositive: {
     borderLeftColor: '#5cb85c',
@@ -49,6 +52,12 @@ const styles = StyleSheet.create({
   itemContainerNegative: {
     borderLeftColor: '#d9534f',
     borderLeftWidth: 3,
+  },
+  amountPositive: {
+    color: '#5cb85c',
+  },
+  amountNegative: {
+    color: '#d9534f',
   },
   row: {
     flexDirection: 'row',

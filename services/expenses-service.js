@@ -24,6 +24,29 @@ const getExpenseDetails = () => {
   }));
 }
 
+const getCategorySummary = (startDate, endDate) => {
+  return new Promise((resolve, reject) => dbAccess.transaction(tx => {
+    tx.executeSql(`
+      select
+        c.name as categoryName,
+        e.categoryId,
+        sum(e.amount) as totalAmount
+      from Expenses e inner join Categories c
+        on e.categoryId = c.id
+      where 
+        e.date >= '${startDate}' and e.date <= '${endDate}'
+      group by
+        e.categoryId
+      order by c.name asc;
+    `,
+    [],
+    (_, { rows: { _array }}) => {
+      resolve(_array)
+    },
+    reject)
+  }));
+}
+
 const addExpense = (categoryId, subcategoryId, description, amount, accountId, date) => {
   return new Promise((resolve, reject) => dbAccess.transaction(tx => {
     tx.executeSql(`
@@ -59,5 +82,6 @@ const updateExpense = (id, categoryId, subcategoryId, description, amount, accou
 export const expensesService = {
   getExpenseDetails,
   addExpense,
-  updateExpense
+  updateExpense,
+  getExpenseDetails2: getCategorySummary
 };

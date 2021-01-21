@@ -1,30 +1,25 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import {formatBalance} from './../services/format-service';
 
 const AccountListItem = ({account}) => {
 
   const navigation = useNavigation();
+  const [isPositive, setIsPositive] = useState(false);
 
-  const formatBalance = (balance) => {
-    if(!balance) return '$ 0.00';
-
-    const value = parseFloat(balance);
-    const formattedNumber = value >= 0 ? `$ ${value.toFixed(2)}` 
-    : `-$ ${Math.abs(value).toFixed(2)}`;
-
-    return formattedNumber === '-$ 0.00' ? '$ 0.00' : formattedNumber;
-  }
-
-  const isPositive = (number) => {
-    if(!number) return true;
-    const value = parseFloat(parseFloat(number).toFixed(0));
-    return parseFloat(value) >= 0;
-  }
+  useEffect(() => {
+    if(!account.currentBalance){
+      setIsPositive(true);
+    } else {
+      const value = parseFloat(parseFloat(account.currentBalance).toFixed(0));
+      setIsPositive(parseFloat(value) >= 0);
+    }
+  }, []);
 
   return (
-    <View style={[styles.itemContainer, isPositive(account.currentBalance) ? styles.itemContainerPositive : styles.itemContainerNegative]}>
+    <View style={[styles.itemContainer, isPositive ? styles.itemContainerPositive : styles.itemContainerNegative]}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{account.name}</Text>
         <TouchableOpacity 
@@ -35,7 +30,10 @@ const AccountListItem = ({account}) => {
           <Ionicons name="pencil-sharp" size={16} color="black"></Ionicons>
         </TouchableOpacity>
       </View>
-      <Text>Balance: {formatBalance(account.currentBalance)}</Text>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text>Balance:</Text>
+        <Text style={[isPositive ? styles.amountPositive : styles.amountNegative]}>{formatBalance(account.currentBalance)}</Text>
+      </View>
     </View>
   );
 };
@@ -45,7 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 2,
     padding: 5,
-    marginVertical: 8
+    marginVertical: 3
   },
   itemContainerPositive: {
     borderLeftColor: '#5cb85c',
@@ -63,6 +61,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: 'bold'
+  },
+  amountPositive: {
+    color: '#5cb85c',
+  },
+  amountNegative: {
+    color: '#d9534f',
   }
 });
 

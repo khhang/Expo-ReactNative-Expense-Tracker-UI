@@ -4,14 +4,20 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 /*
   Id
   CategoryId
-  Limit
+  Cap
   Deleted Date -- for tracking history (can be null)
+  TODO: track history of budgets
 */
 
 const Budgets = () => {
   return (
     <View style={styles.screenContainer}>
       <Text>This page isn't ready yet</Text>
+      <View>
+        <Button
+          title="Add Budget"
+        ></Button>
+      </View>
     </View>
   );
 };

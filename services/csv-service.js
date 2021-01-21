@@ -1,7 +1,7 @@
 import {categoriesService} from './categories-service';
 import {accountsService} from './accounts-service';
 import {expensesService} from './expenses-service';
-import {initializeTables, dropTables} from './sqlite-service';
+import {initializeTables, dropExpenseTables} from './sqlite-service';
 
 const formatAmount = (value) => {
   if(!value) return '0';
