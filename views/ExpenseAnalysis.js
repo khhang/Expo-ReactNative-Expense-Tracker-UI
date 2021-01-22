@@ -48,7 +48,7 @@ const ExpenseAnalysis = () => {
         <TouchableOpacity onPress={() => {
           setNextDate(selectedEndDate)
         }}>
-          <Ionicons name="chevron-back-sharp" size={16} color="#696969"></Ionicons>
+          <Ionicons name="chevron-back-sharp" size={20} color="#696969"></Ionicons>
         </TouchableOpacity>
         <View>
           <Text style={{color: '#696969'}}>{`${getMonthName(selectedEndDate.getMonth())} ${selectedEndDate.getFullYear()}`}</Text>
@@ -56,7 +56,7 @@ const ExpenseAnalysis = () => {
         <TouchableOpacity onPress={() => {
           setPreviousDate(selectedEndDate)
         }}>
-          <Ionicons name="chevron-forward-sharp" size={16} color="#696969"></Ionicons>
+          <Ionicons name="chevron-forward-sharp" size={20} color="#696969"></Ionicons>
         </TouchableOpacity>
       </View>
       <View style={styles.netGainContainer}>

@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList, Button } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList} from 'react-native';
 import {formatBalance, getMonthName} from './../services/format-service';
 import {expensesService} from './../services/expenses-service';
-import {categoriesService} from './../services/categories-service';
 import CategorySummaryListItem from './../components/CategorySummaryListItem';
 
 const CategorySummary = ({route}) => {

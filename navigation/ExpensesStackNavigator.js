@@ -6,7 +6,7 @@ import MenuHeaderButton from './../components/MenuHeaderButton';
 
 const Stack = createStackNavigator();
 
-const headerLeftButtonStyle = {marginBottom: 18};
+const headerRightButtonStyle = {marginBottom: 18};
 
 const ExpensesStackNavigator = () => {
   return (
@@ -25,7 +25,7 @@ const ExpensesStackNavigator = () => {
       name="Expenses"
       component={Expenses}    
       options={{
-        headerLeft: () => (
+        headerRight: () => (
           <MenuHeaderButton/>
         ),
       }}
@@ -34,7 +34,7 @@ const ExpensesStackNavigator = () => {
       name="EditExpense"
       component={EditExpense}
       options={{
-        headerLeftContainerStyle: headerLeftButtonStyle
+        headerRightContainerStyle: headerRightButtonStyle
       }}
     />
   </Stack.Navigator>

@@ -69,7 +69,8 @@ const App = () => {
       onStateChange={() => setCurrRoute(navigationRef.current.getCurrentRoute().name)}
     >
       <View style={{paddingTop: StatusBar.currentHeight + 15}}/>
-      <Drawer.Navigator 
+      <Drawer.Navigator
+        drawerPosition="right"
         initialRouteName={currRoute}
       >
         <Drawer.Screen
@@ -79,10 +80,10 @@ const App = () => {
           name="Accounts"
           component={AccountsStackNavigator}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="Budgets"
           component={BudgetsStackNavigator}
-        />
+        /> */}
         <Drawer.Screen 
           name="Expenses"
           component={ExpensesStackNavigator}/>

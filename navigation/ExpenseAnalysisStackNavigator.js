@@ -6,7 +6,7 @@ import CategorySummary from './../views/CategorySummary';
 
 const Stack = createStackNavigator()
 
-const headerLeftButtonStyle = {marginBottom: 18};
+const headerRightButtonStyle = {marginBottom: 18};
 
 const ExpenseAnalysisStackNavigator = () => {
   return (
@@ -26,7 +26,7 @@ const ExpenseAnalysisStackNavigator = () => {
         component={ExpenseAnalysis}
         options={{
           title: 'Expense Analysis',
-          headerLeft: () => (
+          headerRight: () => (
             <MenuHeaderButton/>
           ),
         }}
@@ -35,7 +35,7 @@ const ExpenseAnalysisStackNavigator = () => {
         name="CategorySummary"
         component={CategorySummary}
         options={{
-          headerLeftContainerStyle: headerLeftButtonStyle,
+          headerRightContainerStyle: headerRightButtonStyle,
           title: 'Category Summary'
         }}
       />

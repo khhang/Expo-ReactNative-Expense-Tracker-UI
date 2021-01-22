@@ -22,7 +22,7 @@ const HomeStackNavigator = () => {
         name="Home"
         component={Home}
         options={{
-          headerLeft: () => (
+          headerRight: () => (
             <MenuHeaderButton/>
           ),
         }}

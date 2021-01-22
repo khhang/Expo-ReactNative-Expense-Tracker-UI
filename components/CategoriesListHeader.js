@@ -18,7 +18,7 @@ export const CategoriesListHeader = ({category}) => {
             navigation.navigate('EditSubcategory', {category});
           }}
         >
-          <Ionicons name="add-circle-sharp" size={16} color="white"></Ionicons>
+          <Ionicons name="add-circle-sharp" size={20} color="white"></Ionicons>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -26,7 +26,7 @@ export const CategoriesListHeader = ({category}) => {
             navigation.navigate('EditCategory', {category})
           }}
         >
-          <Ionicons name="pencil-sharp" size={16} color="white"></Ionicons>
+          <Ionicons name="pencil-sharp" size={20} color="white"></Ionicons>
         </TouchableOpacity>
       </View>
     </View>

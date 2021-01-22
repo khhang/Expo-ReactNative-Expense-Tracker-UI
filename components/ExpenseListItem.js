@@ -22,7 +22,7 @@ const ExpenseListItem = ({expenseDetail}) => {
             navigation.navigate('EditExpense', {expense: {...expenseDetail}});
           }}
         >
-          <Ionicons name="pencil-sharp" size={16} color="black"></Ionicons>
+          <Ionicons name="pencil-sharp" size={20} color="black"></Ionicons>
         </TouchableOpacity>
       </View>
       <View>

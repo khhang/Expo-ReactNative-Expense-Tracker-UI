@@ -20,7 +20,7 @@ const CategorySummaryListItem = ({item, clickEnabled}) => {
         <Text>{item.categoryName || '~'}</Text>
         <View style={{flexDirection: 'row'}}>
           <Text style={[isPositive ? styles.amountPositive : styles.amountNegative]}>{formatBalance(item.totalAmount)}</Text>
-          {clickEnabled && <Ionicons style={{lineHeight: 20}} name="chevron-forward-sharp" size={16} color="#696969"></Ionicons>}
+          {clickEnabled && <Ionicons style={{lineHeight: 21}} name="chevron-forward-sharp" size={20} color="#696969"></Ionicons>}
         </View>
       </View>
     </TouchableOpacity>

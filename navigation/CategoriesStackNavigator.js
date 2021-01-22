@@ -8,7 +8,7 @@ import MenuHeaderButton from './../components/MenuHeaderButton';
 
 const Stack = createStackNavigator();
 
-const headerLeftButtonStyle = {marginBottom: 18};
+const headerRightButtonStyle = {marginBottom: 18};
 
 const CategoriesStackNavigator = () => {
   return (
@@ -27,7 +27,7 @@ const CategoriesStackNavigator = () => {
         name="Categories"
         component={Categories}
         options={{
-          headerLeft: () => (
+          headerRight: () => (
             <MenuHeaderButton/>
           ),
         }}/>
@@ -35,14 +35,14 @@ const CategoriesStackNavigator = () => {
         name="EditCategory" 
         component={EditCategory}
         options={{
-          headerLeftContainerStyle: headerLeftButtonStyle
+          headerRightContainerStyle: headerRightButtonStyle
         }}
         />
       <Stack.Screen
         name="EditSubcategory"
         component={EditSubcategory}
         options={{
-          headerLeftContainerStyle: headerLeftButtonStyle
+          headerRightContainerStyle: headerRightButtonStyle
         }}
       />
     </Stack.Navigator>

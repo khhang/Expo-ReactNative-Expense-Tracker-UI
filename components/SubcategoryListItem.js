@@ -14,7 +14,7 @@ const SubcategoryListItem = ({subcat, category}) => {
           navigation.navigate('EditSubcategory', { subcat, category })
         }}
       >
-        <Ionicons name="pencil-sharp" size={16} color="black"></Ionicons>
+        <Ionicons name="pencil-sharp" size={20} color="black"></Ionicons>
       </TouchableOpacity>
     </View>
   );

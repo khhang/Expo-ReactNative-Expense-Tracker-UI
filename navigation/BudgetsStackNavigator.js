@@ -5,7 +5,7 @@ import Budgets from '../views/Budgets';
 
 const Stack = createStackNavigator();
 
-// const headerLeftButtonStyle = {marginBottom: 18};
+// const headerRightButtonStyle = {marginBottom: 18};
 
 const BudgetsStackNavigator = () => {
   return (
@@ -24,7 +24,7 @@ const BudgetsStackNavigator = () => {
         name="Budgets"
         component={Budgets}
         options={{
-          headerLeft: () => (
+          headerRight: () => (
             <MenuHeaderButton/>
           ),
         }}

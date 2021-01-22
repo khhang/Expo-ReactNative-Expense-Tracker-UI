@@ -7,7 +7,7 @@ const MenuHeaderButton = () => {
   const navigation = useNavigation();
 
   return(
-    <View style={{marginBottom: 18, marginLeft: 20}}>
+    <View style={{marginBottom: 18, marginRight: 20}}>
       <TouchableOpacity onPress={() => navigation.openDrawer()}>
         <Ionicons
           name="menu-sharp"
