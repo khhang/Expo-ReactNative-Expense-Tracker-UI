@@ -69,24 +69,28 @@ const ExpenseAnalysis = () => {
       </View>
       <View style={{flex: 1, paddingTop: 10}}>
         {loading ? (
-        <View style={{height: '100%', justifyContent: 'center', backgroundColor: 'white'}}>
+        <View style={{padding: 20, justifyContent: 'center', backgroundColor: 'white'}}>
           <ActivityIndicator size="large" color="#2196F3"/>
         </View>) : 
-        categorySummary.length ?
           (<FlatList
-            data={categorySummary}
-            keyExtractor={item => item.categoryId.toString()}
-            renderItem={({item}) => (<CategorySummaryListItem clickEnabled={true} item={{
-              ...item,
-              startDate: getFirstDateOfMonth(selectedEndDate).toISOString(),
-              endDate: selectedEndDate.toISOString()
-            }}/>)}
-          />) :
-          (
-            <View style={{height: '100%', justifyContent: 'center', backgroundColor: 'white'}}>
-              <Text style={{textAlign: 'center', paddingBottom: 250}}>No summary for this month</Text>
-            </View>
-          )}
+              onRefresh={async() => {
+                setLoading(true);
+                await fetchData();
+              }}
+              refreshing={loading}
+              data={categorySummary}
+              keyExtractor={item => item.categoryId.toString()}
+              renderItem={({item}) => (<CategorySummaryListItem clickEnabled={true} item={{
+                ...item,
+                startDate: getFirstDateOfMonth(selectedEndDate).toISOString(),
+                endDate: selectedEndDate.toISOString()
+              }}/>)}
+              ListEmptyComponent={(
+                <View style={{padding: 20, justifyContent: 'center', backgroundColor: 'white'}}>
+                  <Text style={{textAlign: 'center'}}>No summary for this month</Text>
+                </View>
+              )}
+            />)}
       </View>
     </View>
   );

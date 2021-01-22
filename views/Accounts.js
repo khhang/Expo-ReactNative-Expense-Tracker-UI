@@ -11,6 +11,7 @@ import {formatBalance} from './../services/format-service';
 const Accounts = ({navigation, route}) => {
 
   const [accounts, setAccounts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getNetWorth = () => {
     let sum = 0;
@@ -23,11 +24,12 @@ const Accounts = ({navigation, route}) => {
     return sum;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setAccounts(await accountsService.getAccounts());
-    };
+  const fetchData = async () => {
+    setAccounts(await accountsService.getAccounts());
+    setLoading(false);
+  };
 
+  useEffect(() => {
     const addAccount = async (name, startingBalance) => {
       if(accounts.find(x => x.name === name)){
         Alert.alert('Adding Account', `The account with the name "${name}" already exists.`);
@@ -67,6 +69,11 @@ const Accounts = ({navigation, route}) => {
       </View>
       <View style={{ flexGrow: 1, overflow: 'scroll', paddingTop: 10}}>
         <FlatList
+          onRefresh={async () => {
+            setLoading(true);
+            await fetchData();
+          }}
+          refreshing={loading}
           data={accounts}
           keyExtractor={item => item.id.toString()}
           renderItem={({item}) => (<AccountListItem account={item}/>)}

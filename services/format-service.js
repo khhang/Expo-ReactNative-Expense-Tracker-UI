@@ -5,7 +5,8 @@ export const formatBalance = (balance) => {
   const formattedNumber = value >= 0 ? `$ ${value.toFixed(2)}` 
   : `-$ ${Math.abs(value).toFixed(2)}`;
 
-  return formattedNumber === '-$ 0.00' ? '$ 0.00' : formattedNumber;
+  return formattedNumber === '-$ 0.00' ? '$ 0.00' : 
+    formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 export const getMonthName = (month) => {

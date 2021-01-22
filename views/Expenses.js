@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button, VirtualizedList } from 'react-native';
 import {expensesService} from './../services/expenses-service';
 import ExpenseListItem from './../components/ExpenseListItem';
 
@@ -16,11 +16,15 @@ import ExpenseListItem from './../components/ExpenseListItem';
 const Expenses = ({navigation, route}) => {
 
   const [expenseDetails, setExpenseDetails] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  const fetchData = async () => {
+    setExpenseDetails(await expensesService.getExpenseDetails());
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setExpenseDetails(await expensesService.getExpenseDetails());
-    };
+    setLoading(true);
 
     const addExpense = async(description, amount, accountId, categoryId, subcategoryId, date) => {
       await expensesService.addExpense(categoryId, subcategoryId, description, amount, accountId, date);
@@ -45,10 +49,18 @@ const Expenses = ({navigation, route}) => {
 
   return (
     <View style={styles.screenContainer}>
-      <FlatList
+      <VirtualizedList
+        onRefresh={async () => {
+          setLoading(true);
+          await fetchData();
+        }}
+        refreshing={loading}
         data={expenseDetails}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (<ExpenseListItem expenseDetail={item}/>)}
+        getItemCount={() => expenseDetails.length}
+        getItem={(data, index) => expenseDetails[index]}
+        initialNumToRender={7}
       />
       <View style={styles.buttonContainer}>
         <Button
