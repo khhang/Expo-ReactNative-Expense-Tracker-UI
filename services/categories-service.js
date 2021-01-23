@@ -104,7 +104,7 @@ const updateSubcategory = (id, name) => {
   return new Promise((resolve, reject) => dbAccess.transaction(tx => {
     tx.executeSql(`
       update Subcategories
-      set name = '?'
+      set name = ?
       where id = ?
     `,
     [name, id],

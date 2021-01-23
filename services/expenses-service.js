@@ -35,12 +35,12 @@ const getCategorySummary = (startDate, endDate) => {
       from Expenses e inner join Categories c
         on e.categoryId = c.id
       where 
-        e.date >= '${startDate}' and e.date <= '${endDate}'
+        e.date >= ? and e.date <= ?
       group by
         e.categoryId
       order by c.name asc;
     `,
-    [],
+    [startDate, endDate],
     (_, { rows: { _array }}) => {
       resolve(_array)
     },
@@ -58,13 +58,13 @@ const getSubcategorySummaryByCategoryId = (categoryId, startDate, endDate) => {
       from Expenses e left outer join Subcategories sc
         on e.subcategoryId = sc.id
       where 
-        e.date >= '${startDate}' and e.date <= '${endDate}'
+        e.date >= ? and e.date <= ?
         and e.categoryId = ?
       group by
         e.subcategoryId
       order by sc.name asc;
     `,
-    [categoryId],
+    [startDate, endDate, categoryId],
     (_, { rows: { _array }}) => {
       resolve(_array)
     },
