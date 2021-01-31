@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, SectionList } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Button, SectionList } from 'react-native';
 import {expensesService} from './../services/expenses-service';
 import ExpenseListItem from './../components/ExpenseListItem';
 import ExpenseListHeader from './../components/ExpenseListHeader';
 import ListDividerFooter from './../components/ListDividerFooter';
 import CustomTextInput from './../components/CustomTextInput';
-import InputLabel from './../components/InputLabel';
+import {Ionicons} from '@expo/vector-icons';
 
 /**
  * Need to keep track of:
@@ -90,18 +90,25 @@ const Expenses = ({navigation, route}) => {
 
   return (
     <View style={styles.screenContainer}>
-      <View style={{paddingBottom: 10}}>
-        <CustomTextInput
-          placeholder="Search"
-          value={searchText}
-          onChangeText={async (text) => {
-            setLoading(true);
-            setSearchText(text);
-            const dateGroupedDetails = await getExpenseDetailedGroupedByDate(text);
-            setExpenseDetailsGroupedByDate(dateGroupedDetails);
-            setLoading(false);
-          }}
-        />
+      <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 10}}>
+        <View style={{flexGrow: 1, flexShrink: 0, flexBasis: 0}}>
+          <CustomTextInput
+            placeholder="Search"
+            value={searchText}
+            onChangeText={async (text) => {
+              setLoading(true);
+              setSearchText(text);
+              const dateGroupedDetails = await getExpenseDetailedGroupedByDate(text);
+              setExpenseDetailsGroupedByDate(dateGroupedDetails);
+              setLoading(false);
+            }}
+          />
+        </View>
+        <View style={{flexGrow: 0, flexShrink: 0, paddingLeft: 10, paddingRight: 10}}>
+          <TouchableOpacity>
+            <Ionicons name="options-sharp" size={20} color="black"></Ionicons>
+          </TouchableOpacity>
+        </View>
       </View>
       <SectionList
         sections={expenseDetailsGroupedByDate}
