@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Button, SectionList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button, SectionList, TouchableOpacityComponent } from 'react-native';
 import {expensesService} from './../services/expenses-service';
 import ExpenseListItem from './../components/ExpenseListItem';
 import ExpenseListHeader from './../components/ExpenseListHeader';
 import ListDividerFooter from './../components/ListDividerFooter';
 import CustomTextInput from './../components/CustomTextInput';
 import {Ionicons} from '@expo/vector-icons';
+import {formatNumber, formatDateFromObj} from './../services/format-service';
 
 /**
  * Need to keep track of:
@@ -18,18 +19,26 @@ import {Ionicons} from '@expo/vector-icons';
  */
 
 const Expenses = ({navigation, route}) => {
-  const [searchText, setSearchText] = useState('');
   const [expenseDetailsGroupedByDate, setExpenseDetailsGroupedByDate] = useState([]);
+  const [totalExpenseCount, setTotalExpenseCount] = useState(0);
   const [loading, setLoading] = useState(true);
   
+  const [searchText, setSearchText] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [subCategory, setSubcategory] = useState(null);
+
   const fetchData = async () => {
-    const dateGroupedDetails = await getExpenseDetailedGroupedByDate(searchText);
+    const dateGroupedDetails = await getExpenseDetailedGroupedByDate(searchText, startDate, endDate);
     setExpenseDetailsGroupedByDate(dateGroupedDetails);
     setLoading(false);
   };
 
-  const getExpenseDetailedGroupedByDate = async (searchText) => {
-    const expenseDetails = await expensesService.getExpenseDetails(searchText);
+  const getExpenseDetailedGroupedByDate = async (searchText, startDate, endDate) => {
+    const expenseDetails = await expensesService.getExpenseDetails(searchText, startDate, endDate);
+
+    setTotalExpenseCount(expenseDetails.length);
     return buildTransactionsByDate(groupDetailsByDate(expenseDetails));
   };
 
@@ -75,7 +84,7 @@ const Expenses = ({navigation, route}) => {
       await expensesService.updateExpense(id, categoryId, subcategoryId, description, amount, accountId, date);
     }
 
-    const { expense } = route.params || {};
+    const { expense, dateRangeFilter } = route.params || {};
 
     if(expense){
       if(expense.id){
@@ -85,12 +94,17 @@ const Expenses = ({navigation, route}) => {
       }
     }
 
+    if(dateRangeFilter){
+      setStartDate(new Date(dateRangeFilter.startDate));
+      setEndDate(new Date(dateRangeFilter.endDate));
+    }
+
     fetchData();
-  }, [route.params?.expense]);
+  }, [route.params?.expense, route.params?.dateRangeFilter]);
 
   return (
     <View style={styles.screenContainer}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 10}}>
+      <View style={styles.searchContainer}>
         <View style={{flexGrow: 1, flexShrink: 0, flexBasis: 0}}>
           <CustomTextInput
             placeholder="Search"
@@ -107,6 +121,26 @@ const Expenses = ({navigation, route}) => {
         <View style={{flexGrow: 0, flexShrink: 0, paddingLeft: 10, paddingRight: 10}}>
           <TouchableOpacity>
             <Ionicons name="options-sharp" size={20} color="black"></Ionicons>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.listHeaderContainer}>
+        <View style={styles.totalContainer}>
+          <Text style={{fontSize: 12, fontWeight: 'bold'}}>EXPENSES</Text>
+          <Text style={{fontSize: 14}}>{formatNumber(totalExpenseCount)}</Text>
+        </View>
+        <View style={styles.optionsContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('DateRangeFilter');
+            }}
+          >
+            <View style={{flexDirection: 'row'}}>
+              <Ionicons style={{marginRight: 5}} name="calendar-sharp" size={16} color="#696969"></Ionicons>
+              {endDate || startDate ? (<Text>{startDate ? formatDateFromObj(startDate) : 'Beginning'} - {endDate ? formatDateFromObj(endDate) : 'Present'}</Text>) :
+                (<Text>All Time</Text>)
+              }
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -137,9 +171,41 @@ const Expenses = ({navigation, route}) => {
 const styles = StyleSheet.create({
   screenContainer: {
     padding: 20,
+    paddingTop: 10,
     flexDirection: 'column',
     justifyContent: 'space-between',
     height: '100%'
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 10
+  },
+  listHeaderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 10
+  },
+  totalContainer: {
+    paddingTop: 15,
+    paddingBottom: 15,
+    paddingLeft: 10,
+    paddingRight: 10,
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 2,
+    marginRight: 5
+  },
+  optionsContainer: {
+    paddingTop: 15,
+    paddingBottom: 15,
+    paddingLeft: 10,
+    paddingRight: 10,
+    backgroundColor: 'white',
+    flexGrow: 1,
+    flexShrink: 0,
+    flexBasis: 0,
+    borderRadius: 2
   },
   buttonContainer: {
     marginTop: 20

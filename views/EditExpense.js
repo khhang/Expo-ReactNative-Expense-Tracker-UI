@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
 import {categoriesService} from './../services/categories-service';
 import {accountsService} from './../services/accounts-service';
+import {formatDateFromObj} from './../services/format-service';
 
 const AddMode = 'AddMode';
 const EditMode = 'EditMode';
@@ -40,10 +41,6 @@ const EditExpense = ({navigation, route}) => {
     setShowDatePicker(Platform.OS === 'ios');
     setDate(currentDate);
   };
-
-  const formatDate = (date) => {
-    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-  }
 
   const formatAmount = (amount) => {
     return amount.replace(/[^0-9.-]/g, '')
@@ -141,7 +138,7 @@ const EditExpense = ({navigation, route}) => {
             setShowDatePicker(true);
           }}
         >
-          <Text>{formatDate(date)}</Text>
+          <Text>{formatDateFromObj(date)}</Text>
         </TouchableOpacity>
         {showDatePicker && 
           (<DateTimePicker

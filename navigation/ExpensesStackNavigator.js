@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Expenses from './../views/Expenses';
 import EditExpense from './../views/EditExpense';
 import MenuHeaderButton from './../components/MenuHeaderButton';
+import DateRangeFilter from './../views/DateRangeFilter';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,14 @@ const ExpensesStackNavigator = () => {
       name="EditExpense"
       component={EditExpense}
       options={{
+        headerRightContainerStyle: headerRightButtonStyle
+      }}
+    />
+    <Stack.Screen
+      name="DateRangeFilter"
+      component={DateRangeFilter}
+      options={{
+        title: 'Date Range',
         headerRightContainerStyle: headerRightButtonStyle
       }}
     />

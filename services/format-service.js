@@ -9,6 +9,12 @@ export const formatBalance = (balance) => {
     formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+export const formatNumber = (number) => {
+  return number
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
 export const getMonthName = (month) => {
   switch(month){
     case 0:

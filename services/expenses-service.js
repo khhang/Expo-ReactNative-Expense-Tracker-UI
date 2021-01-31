@@ -1,7 +1,10 @@
 import {dbAccess} from './sqlite-service';
 
-const getExpenseDetails = (name) => {
+const getExpenseDetails = (name, startDate, endDate) => {
   const searchTerm = `%${name || ''}%`;
+  const minDate = startDate?.toISOString() || new Date('0001-01-01T00:00:00Z').toISOString();
+  const maxDate = endDate?.toISOString() || new Date().toISOString();
+
   return new Promise((resolve, reject) => dbAccess.transaction(tx => {
     tx.executeSql(`
       select
@@ -16,12 +19,19 @@ const getExpenseDetails = (name) => {
       left outer join Subcategories s
         on e.subcategoryId = s.id
       where 
-        e.description like ?
-        or c.name like ?
-        or s.name like ?
+        (e.description like ?
+          or c.name like ?
+          or s.name like ?)
+        and (e.date >= ? and e.date <= ?)
       order by e.date desc;
     `,
-    [searchTerm, searchTerm, searchTerm],
+    [
+      searchTerm,
+      searchTerm,
+      searchTerm,
+      minDate,
+      maxDate
+    ],
     (_, { rows: { _array }}) => {
       resolve(_array)
     },
