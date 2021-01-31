@@ -15,8 +15,8 @@ const ExpenseListItem = ({expenseDetail}) => {
       }}
     >
       <View style={styles.row}>
-        <View>
-          <Text style={{fontWeight: 'bold', maxWidth: 300}}>{expenseDetail.description || '~'}</Text>
+        <View style={styles.infoContainer}>
+          <Text style={{fontWeight: 'bold'}}>{expenseDetail.description || '~'}</Text>
           <Text>{expenseDetail.subcategoryName ? 
             `${expenseDetail.categoryName} / ${expenseDetail.subcategoryName}` : `${expenseDetail.categoryName}`}</Text>
           <Text>{expenseDetail.accountName}</Text>
@@ -25,18 +25,6 @@ const ExpenseListItem = ({expenseDetail}) => {
           <Text style={[styles.numberText, isPositive ? styles.amountPositive : styles.amountNegative]}>{formatBalance(expenseDetail.amount)}</Text>
         </View>
       </View>
-
-      {/* <View style={styles.row}>
-        <Text style={{fontWeight: 'bold', maxWidth: 300}}>{expenseDetail.description || '~'}</Text>
-      </View>
-      <View>
-        <Text>{expenseDetail.subcategoryName ? 
-          `${expenseDetail.categoryName} / ${expenseDetail.subcategoryName}` : `${expenseDetail.categoryName}`}</Text>
-      </View>
-      <View style={styles.row}>
-        <Text>{expenseDetail.accountName}</Text>
-        <Text style={[isPositive ? styles.amountPositive : styles.amountNegative]}>{formatBalance(expenseDetail.amount)}</Text>
-      </View> */}
     </TouchableOpacity>
   );
 };
@@ -66,9 +54,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
+  infoContainer: {
+    flexGrow: 1,
+    flexShrink: 1,
+    maxWidth: 250
+  },
   numberContainer: {
+    flexDirection: 'row',
+    flexGrow: 1,
+    flexBasis: 'auto',
+    flexShrink: 0,
     paddingRight: 10,
-    justifyContent: 'center'
+    paddingLeft: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-end'
   },
   numberText: {
     fontSize: 16
