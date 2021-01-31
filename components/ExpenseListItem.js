@@ -4,10 +4,6 @@ import {Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
 import {formatBalance} from './../services/format-service';
 
-const formatDate = (date) => {
-  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-}
-
 const ExpenseListItem = ({expenseDetail}) => {
   const navigation = useNavigation();
 
@@ -29,9 +25,8 @@ const ExpenseListItem = ({expenseDetail}) => {
         <Text>{expenseDetail.subcategoryName ? 
           `${expenseDetail.categoryName} / ${expenseDetail.subcategoryName}` : `${expenseDetail.categoryName}`}</Text>
       </View>
-      <Text>{expenseDetail.accountName}</Text>
       <View style={styles.row}>
-        <Text style={{color: '#696969'}}>{formatDate(new Date(expenseDetail.date))}</Text>
+        <Text>{expenseDetail.accountName}</Text>
         <Text style={[isPositive ? styles.amountPositive : styles.amountNegative]}>{formatBalance(expenseDetail.amount)}</Text>
       </View>
     </View>

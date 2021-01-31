@@ -9,6 +9,7 @@ import {
 import {categoriesService} from './../services/categories-service';
 import CategoriesListHeader from './../components/CategoriesListHeader';
 import SubcategoryListItem from './../components/SubcategoryListItem';
+import ListDividerFooter from './../components/ListDividerFooter';
 
 const Categories = ({navigation, route}) => {
   const [categoriesList, setCategoriesList] = React.useState([]);
@@ -100,7 +101,7 @@ const Categories = ({navigation, route}) => {
             id: section.id, 
             name: section.name
           }}/>)}
-          renderSectionFooter={() => (<View style={styles.spacer}></View>)}
+          renderSectionFooter={() => (<ListDividerFooter/>)}
         />
       </View>
       <View style={styles.buttonContainer}>
@@ -121,12 +122,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     height: '90%'
-  },
-  spacer: {
-    paddingBottom: 15,
-    marginBottom: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#dddddd'
   },
   buttonContainer: {
     marginTop: 20

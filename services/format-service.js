@@ -37,3 +37,13 @@ export const getMonthName = (month) => {
       return 'December';
   }
 }
+
+export const formatDateFromObj = (dateObj) => {
+  return `${dateObj.getMonth() + 1}/${dateObj.getDate()}/${dateObj.getFullYear()}`;
+}
+
+export const formatDateFromString = (dateString) => {
+  const dateSplit = dateString.split('-');
+
+  return `${parseInt(dateSplit[1])}/${dateSplit[2]}/${dateSplit[0]}`;
+};

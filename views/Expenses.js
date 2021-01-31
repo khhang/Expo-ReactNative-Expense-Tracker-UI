@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, VirtualizedList } from 'react-native';
+import { View, Text, StyleSheet, Button, SectionList } from 'react-native';
 import {expensesService} from './../services/expenses-service';
 import ExpenseListItem from './../components/ExpenseListItem';
+import ExpenseListHeader from './../components/ExpenseListHeader';
+import ListDividerFooter from './../components/ListDividerFooter';
 
 /**
  * Need to keep track of:
@@ -14,13 +16,48 @@ import ExpenseListItem from './../components/ExpenseListItem';
  */
 
 const Expenses = ({navigation, route}) => {
-
+  const [expenseDetailsGroupedByDate, setExpenseDetailsGroupedByDate] = useState([]);
   const [expenseDetails, setExpenseDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   
   const fetchData = async () => {
-    setExpenseDetails(await expensesService.getExpenseDetails());
+    const expenseDetails = await expensesService.getExpenseDetails();
+    const dateGroupedDetails = buildTransactionsByDate(groupDetailsByDate(expenseDetails));
+
+    setExpenseDetailsGroupedByDate(dateGroupedDetails);
+    setExpenseDetails(expenseDetails);
     setLoading(false);
+  };
+
+  const groupDetailsByDate = (expenseDetails) => {
+    const dateGroupedDetails = {};
+
+    expenseDetails.forEach(ed => {
+      const date = ed.date.slice(0, 10);
+
+      if(dateGroupedDetails[date]){
+        dateGroupedDetails[date].push(ed);
+      }else{
+        dateGroupedDetails[date] = [ed];
+      }
+    });
+
+    return dateGroupedDetails;
+  };
+
+  const buildTransactionsByDate = (dateGroupedDetails) => {
+    const results = [];
+
+    Object.keys(dateGroupedDetails).forEach((key) => {
+      const expenseDetailsByDate = {
+        title: key,
+        data: dateGroupedDetails[key]
+      };
+
+      results.push(expenseDetailsByDate);
+    });
+
+    return results.sort((a, b) => b.title.localeCompare(a.title));
   };
 
   useEffect(() => {
@@ -49,18 +86,17 @@ const Expenses = ({navigation, route}) => {
 
   return (
     <View style={styles.screenContainer}>
-      <VirtualizedList
+      <SectionList
+        sections={expenseDetailsGroupedByDate}
         onRefresh={async () => {
           setLoading(true);
           await fetchData();
         }}
         refreshing={loading}
-        data={expenseDetails}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (<ExpenseListItem expenseDetail={item}/>)}
-        getItemCount={() => expenseDetails.length}
-        getItem={(data, index) => expenseDetails[index]}
-        initialNumToRender={7}
+        renderSectionHeader={({section: {title}}) => (<ExpenseListHeader title={title}/>)}
+        renderSectionFooter={() => (<ListDividerFooter/>)}
       />
       <View style={styles.buttonContainer}>
         <Button
