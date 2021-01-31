@@ -17,7 +17,6 @@ import ListDividerFooter from './../components/ListDividerFooter';
 
 const Expenses = ({navigation, route}) => {
   const [expenseDetailsGroupedByDate, setExpenseDetailsGroupedByDate] = useState([]);
-  const [expenseDetails, setExpenseDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   
   const fetchData = async () => {
@@ -25,7 +24,6 @@ const Expenses = ({navigation, route}) => {
     const dateGroupedDetails = buildTransactionsByDate(groupDetailsByDate(expenseDetails));
 
     setExpenseDetailsGroupedByDate(dateGroupedDetails);
-    setExpenseDetails(expenseDetails);
     setLoading(false);
   };
 
