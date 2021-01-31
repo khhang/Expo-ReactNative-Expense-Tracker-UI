@@ -4,6 +4,8 @@ import {expensesService} from './../services/expenses-service';
 import ExpenseListItem from './../components/ExpenseListItem';
 import ExpenseListHeader from './../components/ExpenseListHeader';
 import ListDividerFooter from './../components/ListDividerFooter';
+import CustomTextInput from './../components/CustomTextInput';
+import InputLabel from './../components/InputLabel';
 
 /**
  * Need to keep track of:
@@ -16,15 +18,19 @@ import ListDividerFooter from './../components/ListDividerFooter';
  */
 
 const Expenses = ({navigation, route}) => {
+  const [searchText, setSearchText] = useState('');
   const [expenseDetailsGroupedByDate, setExpenseDetailsGroupedByDate] = useState([]);
   const [loading, setLoading] = useState(true);
   
   const fetchData = async () => {
-    const expenseDetails = await expensesService.getExpenseDetails();
-    const dateGroupedDetails = buildTransactionsByDate(groupDetailsByDate(expenseDetails));
-
+    const dateGroupedDetails = await getExpenseDetailedGroupedByDate(searchText);
     setExpenseDetailsGroupedByDate(dateGroupedDetails);
     setLoading(false);
+  };
+
+  const getExpenseDetailedGroupedByDate = async (searchText) => {
+    const expenseDetails = await expensesService.getExpenseDetails(searchText);
+    return buildTransactionsByDate(groupDetailsByDate(expenseDetails));
   };
 
   const groupDetailsByDate = (expenseDetails) => {
@@ -84,6 +90,19 @@ const Expenses = ({navigation, route}) => {
 
   return (
     <View style={styles.screenContainer}>
+      <View style={{paddingBottom: 10}}>
+        <CustomTextInput
+          placeholder="Search"
+          value={searchText}
+          onChangeText={async (text) => {
+            setLoading(true);
+            setSearchText(text);
+            const dateGroupedDetails = await getExpenseDetailedGroupedByDate(text);
+            setExpenseDetailsGroupedByDate(dateGroupedDetails);
+            setLoading(false);
+          }}
+        />
+      </View>
       <SectionList
         sections={expenseDetailsGroupedByDate}
         onRefresh={async () => {

@@ -1,9 +1,10 @@
 import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
-const CustomTextInput = ({onChangeText, value, editable, keyboardType}) => {
+const CustomTextInput = ({onChangeText, value, editable, keyboardType, placeholder}) => {
   return (
     <TextInput
+      placeholder={placeholder}
       onChangeText={onChangeText}
       value={value}
       editable={editable}

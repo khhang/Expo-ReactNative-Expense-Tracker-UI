@@ -1,6 +1,7 @@
 import {dbAccess} from './sqlite-service';
 
-const getExpenseDetails = () => {
+const getExpenseDetails = (name) => {
+  const searchTerm = `%${name || ''}%`;
   return new Promise((resolve, reject) => dbAccess.transaction(tx => {
     tx.executeSql(`
       select
@@ -14,9 +15,13 @@ const getExpenseDetails = () => {
         on e.categoryId = c.id
       left outer join Subcategories s
         on e.subcategoryId = s.id
+      where 
+        e.description like ?
+        or c.name like ?
+        or s.name like ?
       order by e.date desc;
     `,
-    [],
+    [searchTerm, searchTerm, searchTerm],
     (_, { rows: { _array }}) => {
       resolve(_array)
     },
