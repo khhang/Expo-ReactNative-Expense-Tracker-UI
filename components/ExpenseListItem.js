@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {Ionicons} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
 import {formatBalance} from './../services/format-service';
 
@@ -10,16 +9,25 @@ const ExpenseListItem = ({expenseDetail}) => {
   const isPositive = expenseDetail.amount >= 0;
 
   return (
-    <View style={[styles.itemContainer, isPositive ? styles.itemContainerPositive : styles.itemContainerNegative]}>
+    <TouchableOpacity style={[styles.itemContainer, isPositive ? styles.itemContainerPositive : styles.itemContainerNegative]}
+      onLongPress={() => {
+        navigation.navigate('EditExpense', {expense: {...expenseDetail}});
+      }}
+    >
       <View style={styles.row}>
+        <View>
+          <Text style={{fontWeight: 'bold', maxWidth: 300}}>{expenseDetail.description || '~'}</Text>
+          <Text>{expenseDetail.subcategoryName ? 
+            `${expenseDetail.categoryName} / ${expenseDetail.subcategoryName}` : `${expenseDetail.categoryName}`}</Text>
+          <Text>{expenseDetail.accountName}</Text>
+        </View>
+        <View style={styles.numberContainer}>
+          <Text style={[styles.numberText, isPositive ? styles.amountPositive : styles.amountNegative]}>{formatBalance(expenseDetail.amount)}</Text>
+        </View>
+      </View>
+
+      {/* <View style={styles.row}>
         <Text style={{fontWeight: 'bold', maxWidth: 300}}>{expenseDetail.description || '~'}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('EditExpense', {expense: {...expenseDetail}});
-          }}
-        >
-          <Ionicons name="pencil-sharp" size={20} color="black"></Ionicons>
-        </TouchableOpacity>
       </View>
       <View>
         <Text>{expenseDetail.subcategoryName ? 
@@ -28,8 +36,8 @@ const ExpenseListItem = ({expenseDetail}) => {
       <View style={styles.row}>
         <Text>{expenseDetail.accountName}</Text>
         <Text style={[isPositive ? styles.amountPositive : styles.amountNegative]}>{formatBalance(expenseDetail.amount)}</Text>
-      </View>
-    </View>
+      </View> */}
+    </TouchableOpacity>
   );
 };
 
@@ -57,6 +65,13 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  numberContainer: {
+    paddingRight: 10,
+    justifyContent: 'center'
+  },
+  numberText: {
+    fontSize: 16
   }
 });
 
