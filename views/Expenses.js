@@ -97,10 +97,16 @@ const Expenses = ({navigation, route}) => {
     if(dateRangeFilter){
       setStartDate(new Date(dateRangeFilter.startDate));
       setEndDate(new Date(dateRangeFilter.endDate));
+      return;
     }
 
     fetchData();
   }, [route.params?.expense, route.params?.dateRangeFilter]);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchData();
+  }, [startDate, endDate]);
 
   return (
     <View style={styles.screenContainer}>
@@ -132,7 +138,10 @@ const Expenses = ({navigation, route}) => {
         <View style={styles.optionsContainer}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('DateRangeFilter');
+              navigation.navigate('DateRangeFilter', { 
+                startDate: startDate?.toISOString(),
+                endDate: endDate?.toISOString() 
+              });
             }}
           >
             <View style={{flexDirection: 'row'}}>

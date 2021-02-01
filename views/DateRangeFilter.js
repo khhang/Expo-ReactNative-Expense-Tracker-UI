@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { View, Text, StyleSheet, Button, TouchableOpacity, Platform } from 'react-native';
 import InputLabel from './../components/InputLabel';
 import {formatDateFromObj} from './../services/format-service';
 
-const DateRangeFilter = ({navigation}) => {
+const DateRangeFilter = ({navigation, route }) => {
+  const { params } = route;
 
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
@@ -22,6 +23,16 @@ const DateRangeFilter = ({navigation}) => {
     setShowEndDatePicker(Platform.OS === 'ios');
     setEndDate(currentDate);
   };
+
+  useEffect(() => {
+    if(params?.startDate){
+      setStartDate(new Date(params.startDate));
+    }
+
+    if(params?.endDate){
+      setEndDate(new Date(params.endDate));
+    }
+  }, []);
 
   return(
     <View style={styles.screenContainer}>
