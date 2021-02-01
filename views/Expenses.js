@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Button, SectionList, TouchableOpacityComponent } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button, SectionList, ActivityIndicator } from 'react-native';
 import {expensesService} from './../services/expenses-service';
 import ExpenseListItem from './../components/ExpenseListItem';
 import ExpenseListHeader from './../components/ExpenseListHeader';
@@ -106,7 +106,7 @@ const Expenses = ({navigation, route}) => {
   useEffect(() => {
     setLoading(true);
     fetchData();
-  }, [startDate, endDate]);
+  }, [searchText, startDate, endDate]);
 
   return (
     <View style={styles.screenContainer}>
@@ -115,20 +115,15 @@ const Expenses = ({navigation, route}) => {
           <CustomTextInput
             placeholder="Search"
             value={searchText}
-            onChangeText={async (text) => {
-              setLoading(true);
-              setSearchText(text);
-              const dateGroupedDetails = await getExpenseDetailedGroupedByDate(text);
-              setExpenseDetailsGroupedByDate(dateGroupedDetails);
-              setLoading(false);
-            }}
+            onChangeText={async (text) => setSearchText(text)}
           />
         </View>
       </View>
       <View style={styles.listHeaderContainer}>
         <View style={styles.totalContainer}>
           <Text style={{fontSize: 12, fontWeight: 'bold'}}>EXPENSES</Text>
-          <Text style={{fontSize: 14}}>{loading ? '-' : formatNumber(totalExpenseCount)}</Text>
+          {loading ? (<ActivityIndicator size="large" color="#2196F3"/>) : 
+            (<Text style={{fontSize: 14}}>{formatNumber(totalExpenseCount)}</Text>)}
         </View>
         <View style={styles.optionsContainer}>
           <TouchableOpacity
@@ -144,6 +139,11 @@ const Expenses = ({navigation, route}) => {
               {endDate || startDate ? (<Text>{startDate ? formatDateFromObj(startDate) : 'Beginning'} - {endDate ? formatDateFromObj(endDate) : 'Present'}</Text>) :
                 (<Text>All Time</Text>)
               }
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginTop: 10}}>
+            <View style={{flexDirection: 'row'}}>
+              <Ionicons style={{marginRight: 5}} name="md-list" size={16} color="#696969"></Ionicons>
             </View>
           </TouchableOpacity>
         </View>
@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     paddingLeft: 10,
     paddingRight: 10,
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 2,
