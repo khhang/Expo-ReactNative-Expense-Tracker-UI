@@ -95,8 +95,8 @@ const Expenses = ({navigation, route}) => {
     }
 
     if(dateRangeFilter){
-      setStartDate(new Date(dateRangeFilter.startDate));
-      setEndDate(new Date(dateRangeFilter.endDate));
+      setStartDate(dateRangeFilter.startDate ? new Date(dateRangeFilter.startDate) : null);
+      setEndDate(dateRangeFilter.endDate ? new Date(dateRangeFilter.endDate) : null);
       return;
     }
 
@@ -124,16 +124,11 @@ const Expenses = ({navigation, route}) => {
             }}
           />
         </View>
-        <View style={{flexGrow: 0, flexShrink: 0, paddingLeft: 10, paddingRight: 10}}>
-          <TouchableOpacity>
-            <Ionicons name="options-sharp" size={20} color="black"></Ionicons>
-          </TouchableOpacity>
-        </View>
       </View>
       <View style={styles.listHeaderContainer}>
         <View style={styles.totalContainer}>
           <Text style={{fontSize: 12, fontWeight: 'bold'}}>EXPENSES</Text>
-          <Text style={{fontSize: 14}}>{formatNumber(totalExpenseCount)}</Text>
+          <Text style={{fontSize: 14}}>{loading ? '-' : formatNumber(totalExpenseCount)}</Text>
         </View>
         <View style={styles.optionsContainer}>
           <TouchableOpacity

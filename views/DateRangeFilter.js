@@ -84,6 +84,21 @@ const DateRangeFilter = ({navigation, route }) => {
               });
             }}
           ></Button>
+          <View style={{marginTop: 10}}>
+            <Button
+              color='#d9534f'
+              title="Clear Range"
+              onPress={() => {
+                navigation.navigate('Expenses', { 
+                  expense: null,
+                  dateRangeFilter: {
+                    startDate: null,
+                    endDate: null
+                  }
+                });
+              }}
+            ></Button>
+          </View>
       </View>
     </View>
   );
@@ -101,7 +116,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     paddingTop: 40,
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   dateInput: {
     borderRadius: 0.1,
