@@ -46,7 +46,7 @@ const Expenses = ({navigation, route}) => {
     const dateGroupedDetails = {};
 
     expenseDetails.forEach(ed => {
-      const date = ed.date.slice(0, 10);
+      const date = formatDateFromObj(new Date(ed.date));
 
       if(dateGroupedDetails[date]){
         dateGroupedDetails[date].push(ed);
@@ -70,7 +70,7 @@ const Expenses = ({navigation, route}) => {
       results.push(expenseDetailsByDate);
     });
 
-    return results.sort((a, b) => b.title.localeCompare(a.title));
+    return results;
   };
 
   const addExpense = async(description, amount, accountId, categoryId, subcategoryId, date) => {

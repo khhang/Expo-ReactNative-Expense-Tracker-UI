@@ -45,7 +45,11 @@ export const getMonthName = (month) => {
 }
 
 export const formatDateFromObj = (dateObj) => {
-  return `${dateObj.getMonth() + 1}/${dateObj.getDate()}/${dateObj.getFullYear()}`;
+  const month = dateObj.getMonth() + 1;
+  const date = dateObj.getDate().toString();
+  const year = dateObj.getFullYear();
+
+  return `${month}/${date.length > 1 ? date : '0' + date}/${year}`;
 }
 
 export const formatDateFromString = (dateString) => {

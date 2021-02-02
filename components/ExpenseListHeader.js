@@ -1,11 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {formatDateFromString} from './../services/format-service';
 
 const ExpenseListHeader = ({title}) => {
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.headerText}>{formatDateFromString(title)}</Text>
+      <Text style={styles.headerText}>{title}</Text>
     </View>
   );
 };
