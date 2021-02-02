@@ -73,17 +73,16 @@ const Expenses = ({navigation, route}) => {
     return results.sort((a, b) => b.title.localeCompare(a.title));
   };
 
+  const addExpense = async(description, amount, accountId, categoryId, subcategoryId, date) => {
+    await expensesService.addExpense(categoryId, subcategoryId, description, amount, accountId, date);
+  };
+
+  const updateExpense = async(id, description, amount, accountId, categoryId, subcategoryId, date) => {
+    await expensesService.updateExpense(id, categoryId, subcategoryId, description, amount, accountId, date);
+  }
+
   useEffect(() => {
     setLoading(true);
-
-    const addExpense = async(description, amount, accountId, categoryId, subcategoryId, date) => {
-      await expensesService.addExpense(categoryId, subcategoryId, description, amount, accountId, date);
-    };
-
-    const updateExpense = async(id, description, amount, accountId, categoryId, subcategoryId, date) => {
-      await expensesService.updateExpense(id, categoryId, subcategoryId, description, amount, accountId, date);
-    }
-
     const { expense, dateRangeFilter } = route.params || {};
 
     if(expense){
@@ -95,11 +94,16 @@ const Expenses = ({navigation, route}) => {
     }
 
     if(dateRangeFilter){
-      setStartDate(dateRangeFilter.startDate ? new Date(dateRangeFilter.startDate) : null);
-      setEndDate(dateRangeFilter.endDate ? new Date(dateRangeFilter.endDate) : null);
+      if(dateRangeFilter.startDate != startDate){
+        setStartDate(dateRangeFilter.startDate ? new Date(dateRangeFilter.startDate) : null);
+      }
+
+      if(dateRangeFilter.endDate != endDate){
+        setEndDate(dateRangeFilter.endDate ? new Date(dateRangeFilter.endDate) : null);
+      }
+      setLoading(false);
       return;
     }
-
     fetchData();
   }, [route.params?.expense, route.params?.dateRangeFilter]);
 
@@ -121,9 +125,9 @@ const Expenses = ({navigation, route}) => {
       </View>
       <View style={styles.listHeaderContainer}>
         <View style={styles.totalContainer}>
-          <Text style={{fontSize: 12, fontWeight: 'bold'}}>EXPENSES</Text>
+          <Text style={{fontSize: 14, fontWeight: 'bold'}}>TOTAL</Text>
           {loading ? (<ActivityIndicator size="large" color="#2196F3"/>) : 
-            (<Text style={{fontSize: 14}}>{formatNumber(totalExpenseCount)}</Text>)}
+            (<Text style={{fontSize: 16}}>{formatNumber(totalExpenseCount)}</Text>)}
         </View>
         <View style={styles.optionsContainer}>
           <TouchableOpacity
@@ -191,10 +195,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   totalContainer: {
-    paddingTop: 15,
-    paddingBottom: 15,
-    paddingLeft: 10,
-    paddingRight: 10,
+    padding: 15,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
