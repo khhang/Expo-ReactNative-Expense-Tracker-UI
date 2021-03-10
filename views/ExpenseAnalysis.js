@@ -12,12 +12,12 @@ const ExpenseAnalysis = () => {
   
   const setNextDate = async (date) => {
     setLoading(true);
-    setSelectedEndDate(new Date(date.getFullYear(), date.getMonth() + 2, 0));
+    setSelectedEndDate(new Date(date.getFullYear(), date.getMonth() + 2, 0, 23, 59, 59));
   };
 
   const setPreviousDate = async (date) => {
     setLoading(true);
-    setSelectedEndDate(new Date(date.getFullYear(), date.getMonth(), 0));
+    setSelectedEndDate(new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59));
   };
 
   const getFirstDateOfMonth = (date) => {
